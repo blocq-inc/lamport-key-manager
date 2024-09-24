@@ -1,0 +1,14 @@
+{
+  "name": "lamport-key-manager",
+  "version": "1.0.0",
+  "description": "Lamport Key Manegement",
+  "author": "Naoto Sato <stardustforever012@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5"
+  }
+}
