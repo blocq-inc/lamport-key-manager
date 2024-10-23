@@ -1,8 +1,11 @@
 export type KeyPair = [string, string];
 
+export type PubKey = KeyPair[];
+export type PrivKey = KeyPair[];
+
 export type LamportKeyPair = {
-  privateKeys: KeyPair[];
-  publicKeys: KeyPair[];
+  privateKeys: PrivKey;
+  publicKeys: PubKey;
 };
 
 export type InitMode = "new" | "load";

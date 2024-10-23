@@ -1,12 +1,19 @@
-import { InitMode, KeyInfo, LamportKeyPair, KeyPair } from "./types";
+import {
+  InitMode,
+  KeyInfo,
+  LamportKeyPair,
+  KeyPair,
+  PrivKey,
+  PubKey,
+} from "./types";
 import crypto from "crypto";
 import fs from "fs";
 import { ethers } from "ethers";
 import { KEY_LENGTH_IN_BYTES, NUMBER_OF_KEYS_IN_LAMPORT } from "./consts";
 
 export class Manager {
-  privateKeys: KeyPair[][] = [];
-  publicKeys: KeyPair[][] = [];
+  privateKeys: PrivKey[] = [];
+  publicKeys: PubKey[] = [];
   lamportKeys: LamportKeyPair[] = [];
 
   constructor(mode: InitMode = "new") {
@@ -63,7 +70,19 @@ export class Manager {
   }
 
   get currentPubKeyHash() {
-    return this.getPubKeyHashFromPublicKey(this.publicKeys[0]); // get first(current) public key
+    if (this.publicKeys.length === 0) {
+      throw new Error("No current public key hash");
+    }
+    if (this.publicKeys.length === 1) {
+      return this.getPubKeyHashFromPublicKey(this.publicKeys[0]);
+    }
+
+    if (this.publicKeys.length > 1) {
+      return this.getPubKeyHashFromPublicKey(
+        this.publicKeys[this.publicKeys.length - 2] // get (last - 1) public key
+      );
+    }
+    throw new Error("No current public key hash");
   }
 
   get nextPubKeyHash() {
@@ -90,14 +109,9 @@ export class Manager {
   }
 
   private getPubKeyHashFromPublicKey(publicKey: KeyPair[]): string {
-    // const remove0x = (str: string) => str.slice(2);
-
-    // // const pub = publicKey.map((key) => [remove0x(key[0]), remove0x(key[1])]);
-    // return this.hash(ethers.solidityPacked(["bytes32[2][256]"], [publicKey]));
     const hash = this.hash(
       ethers.solidityPacked(["bytes32[2][256]"], [publicKey])
     );
-    console.log("hash", hash);
     return hash;
   }
 
@@ -114,14 +128,11 @@ export class Manager {
     return privateKeys;
   }
 
-  private getPublicKeyFromPrivateKey(privateKey: KeyPair[]): KeyPair[] {
-    const publicKeys: KeyPair[] = privateKey.map((keyPair) => [
+  private getPublicKeyFromPrivateKey(privateKey: PrivKey): PubKey {
+    return privateKey.map((keyPair) => [
       this.hash(keyPair[0]),
       this.hash(keyPair[1]),
-      // this.hash(keyPair[0]).slice(2), // remove 0x prefix
-      // this.hash(keyPair[1]).slice(2), // remove 0x prefix
     ]);
-    return publicKeys;
   }
 
   private readKeyFile(): KeyInfo[] {
@@ -147,6 +158,7 @@ export class Manager {
 
   // hash function for keccak256 in ethereum
   private hash(message: string): string {
-    return ethers.keccak256(Buffer.from(message, "hex"));
+    // remove 0x prefix
+    return ethers.keccak256(Buffer.from(message.slice(2), "hex"));
   }
 }
