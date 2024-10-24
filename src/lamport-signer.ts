@@ -1,4 +1,3 @@
-import { ethers } from "ethers";
 import { EncodeType, HashType, LamportKeyPair, Signature } from "./types";
 import { keccak256Hash } from "./crypto/keccak256";
 

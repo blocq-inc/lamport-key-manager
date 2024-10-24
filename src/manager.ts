@@ -62,12 +62,37 @@ export class Manager {
     return this.privateKeys;
   }
 
+  get currentPrivKey(): PrivKey {
+    if (this.privateKeys.length < 2) {
+      throw new Error("No previous private key");
+    }
+    // last - 1 becomes current private key
+    return this.privateKeys[this.privateKeys.length - 2];
+  }
+
   get pubKeys(): KeyPair[][] {
     return this.publicKeys;
   }
 
+  get currentPubKey(): PubKey {
+    if (this.publicKeys.length < 2) {
+      throw new Error("No previous public key");
+    }
+
+    // last - 1 becomes current public key
+    return this.publicKeys[this.publicKeys.length - 2];
+  }
+
   get lamportKeyPairs(): LamportKeyPair[] {
     return this.lamportKeys;
+  }
+
+  get currentLamportKeyPair(): LamportKeyPair {
+    if (this.lamportKeys.length < 2) {
+      throw new Error("keys should be generated at least twice");
+    }
+    // last - 1 becomes current lamport key pair
+    return this.lamportKeys[this.lamportKeys.length - 2];
   }
 
   get currentPubKeyHash() {
@@ -109,6 +134,22 @@ export class Manager {
     return this.lamportKeys[this.lamportKeys.length - 1];
   }
 
+  public static isKeyFileExist(): boolean {
+    try {
+      const pwd = process.cwd();
+      const file = JSON.parse(
+        fs.readFileSync(`${pwd}/keys/keys.json`, "utf-8")
+      );
+      if (file) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+
   private getPubKeyHashFromPublicKey(publicKey: KeyPair[]): string {
     const hash = this.hash(
       ethers.solidityPacked(["bytes32[2][256]"], [publicKey])
@@ -137,7 +178,8 @@ export class Manager {
 
   private readKeyFile(): KeyInfo[] {
     try {
-      return JSON.parse(fs.readFileSync("./keys/keys.json", "utf-8"));
+      const pwd = process.cwd();
+      return JSON.parse(fs.readFileSync(`${pwd}/keys/keys.json`, "utf-8"));
     } catch (error) {
       throw new Error("Failed to load keys");
     }
@@ -150,7 +192,8 @@ export class Manager {
       keys: key,
     }));
     try {
-      fs.writeFileSync("./keys/keys.json", JSON.stringify(keyInfo));
+      const pwd = process.cwd();
+      fs.writeFileSync(`${pwd}/keys/keys.json`, JSON.stringify(keyInfo));
     } catch (error) {
       throw new Error("Failed to save keys");
     }
