@@ -10,6 +10,7 @@ import crypto from "crypto";
 import fs from "fs";
 import { ethers } from "ethers";
 import { KEY_LENGTH_IN_BYTES, NUMBER_OF_KEYS_IN_LAMPORT } from "./consts";
+import { keccak256Hash } from "./crypto/keccak256";
 
 export class Manager {
   privateKeys: PrivKey[] = [];
@@ -121,7 +122,6 @@ export class Manager {
       () => {
         const key1 = crypto.randomBytes(KEY_LENGTH_IN_BYTES).toString("hex");
         const key2 = crypto.randomBytes(KEY_LENGTH_IN_BYTES).toString("hex");
-        // console.log("Generated keys: ", key1, key2);
         return [key1, key2];
       }
     );
@@ -158,7 +158,6 @@ export class Manager {
 
   // hash function for keccak256 in ethereum
   private hash(message: string): string {
-    // remove 0x prefix
-    return ethers.keccak256(Buffer.from(message.slice(2), "hex"));
+    return keccak256Hash(message);
   }
 }

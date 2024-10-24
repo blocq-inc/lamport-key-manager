@@ -1,6 +1,5 @@
 import { Manager } from "./src/manager";
-import { LamportSigner } from "./src/signer";
-import { LamportKeyPair } from "./src/types";
+import { LamportSigner } from "./src/lamport-signer";
 
 // # This script is usage example flow.
 
@@ -23,15 +22,17 @@ let pubKeyHash2: string = "";
   const message = "Hello, World!";
   // 1. load lamport keys
   const manager = new Manager("load");
-  // const lamportKeyPair = manager.lamportKeyPair;
 
+  console.log("currentPubKeyHash", manager.currentPubKeyHash);
+
+  console.log("lamportKeys", manager.lamportKeys.length);
   // 2. generate signature(sign)
-  // const signer = new LamportSigner(lamportKeyPair);
-  // const signature = signer.sign(message);
+  const signer = new LamportSigner(manager.lamportKeys[0]);
+  const signature = signer.sign(message);
 
-  // // 3. verify signature(on the server side)
-  // const isValid = signer.verify(message, lamportKeyPair.publicKeys, signature);
-  // console.log(isValid);
+  // 3. verify signature(on the server side)
+  const isValid = signer.verify(message, signature);
+  console.log(isValid);
 
   // 4. send signature to the server
 
@@ -46,14 +47,12 @@ let pubKeyHash2: string = "";
   if (pubKeyHash1 !== pubKeyHash2) {
     throw Error("pubKeyHash1 and pubKeyHash2 are different");
   }
-  const currentPubKeyHash = manager.currentPubKeyHash;
-  const nextPubKeyHash = manager.nextPubKeyHash;
-  console.log("currentPubKeyHash", currentPubKeyHash);
-  console.log("nextPubKeyHash", nextPubKeyHash);
+  // const currentPubKeyHash = manager.currentPubKeyHash;
+  // const nextPubKeyHash = manager.nextPubKeyHash;
 
-  if (nextPubKeyHash === currentPubKeyHash) {
-    throw Error("nextPubKeyHash and currentPubKeyHash are the same");
-  }
+  // if (nextPubKeyHash === currentPubKeyHash) {
+  //   throw Error("nextPubKeyHash and currentPubKeyHash are the same");
+  // }
 
   // 4-2. send signature, publicKeys, nextPubKeyHash to the smart contract
 
