@@ -34,10 +34,10 @@ let pubKeyHash2: string = "";
   const isValid = signer.verify(message, signature);
   console.log(isValid);
 
-  // 4. send signature to the server
+  // 4. send signature to the contract
 
-  // send
-  // signature, publicKeys ,next_pubkey_hash
+  // send: signature, publicKeys ,nextPubKeyHash
+
   // 4-1. generate next lamport keys and save to the local file
 
   const nextLamportKeyPair = manager.generateNextKeys();
@@ -47,12 +47,12 @@ let pubKeyHash2: string = "";
   if (pubKeyHash1 !== pubKeyHash2) {
     throw Error("pubKeyHash1 and pubKeyHash2 are different");
   }
-  // const currentPubKeyHash = manager.currentPubKeyHash;
-  // const nextPubKeyHash = manager.nextPubKeyHash;
+  const currentPubKeyHash = manager.currentPubKeyHash;
+  const nextPubKeyHash = manager.nextPubKeyHash;
 
-  // if (nextPubKeyHash === currentPubKeyHash) {
-  //   throw Error("nextPubKeyHash and currentPubKeyHash are the same");
-  // }
+  if (nextPubKeyHash === currentPubKeyHash) {
+    throw Error("nextPubKeyHash and currentPubKeyHash are the same");
+  }
 
   // 4-2. send signature, publicKeys, nextPubKeyHash to the smart contract
 
