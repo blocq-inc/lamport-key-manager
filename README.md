@@ -52,3 +52,23 @@ const result = signer.verify(message, signature);
 // After signing, generate next keys because lamport key pair must not be reused.
 manager.generateNextKeys();
 ```
+
+## Development tips
+
+- run test
+
+```bash
+yarn test
+```
+
+- link local package
+
+```bash
+yarn link
+```
+
+- unlink local package, re-build and link again after updating the code for the local development
+
+```bash
+yarn unlink && yarn build && yarn link
+```
