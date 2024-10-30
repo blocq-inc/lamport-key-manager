@@ -4,7 +4,7 @@ export declare class Manager {
     publicKeys: PubKey[];
     lamportKeys: LamportKeyPair[];
     constructor(mode?: InitMode);
-    initPrivateKeys(mode?: InitMode): KeyPair[][];
+    initPrivateKeys(): KeyPair[][];
     get privKeys(): KeyPair[][];
     get currentPrivKey(): PrivKey;
     get pubKeys(): KeyPair[][];
@@ -14,6 +14,7 @@ export declare class Manager {
     get currentPubKeyHash(): string;
     get nextPubKeyHash(): string;
     generateNextKeys(): LamportKeyPair;
+    static isKeyDirExist(): boolean;
     static isKeyFileExist(): boolean;
     private getPubKeyHashFromPublicKey;
     private generatePrivateKeys;

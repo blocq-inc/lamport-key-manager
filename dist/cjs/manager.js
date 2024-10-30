@@ -15,20 +15,32 @@ class Manager {
     lamportKeys = [];
     constructor(mode = "new") {
         if (mode === "new") {
-            const privateKeys = this.initPrivateKeys("new");
-            const publicKeys = this.getPublicKeyFromPrivateKey(privateKeys[0]);
-            this.privateKeys = privateKeys;
-            this.publicKeys.push(publicKeys);
-            this.lamportKeys.push({
-                privateKeys: privateKeys[0],
-                publicKeys,
-            });
-            this.saveKeys(this.lamportKeys);
-            return;
+            if (!Manager.isKeyDirExist()) {
+                const pwd = process.cwd();
+                try {
+                    fs_1.default.mkdirSync(`${pwd}/${consts_1.KEY_DIR_NAME}`);
+                }
+                catch (error) {
+                    throw new Error(`Failed to create directory: /${consts_1.KEY_DIR_NAME}`);
+                }
+            }
+            if (!Manager.isKeyFileExist()) {
+                const privateKeys = this.initPrivateKeys();
+                const publicKeys = this.getPublicKeyFromPrivateKey(privateKeys[0]);
+                this.privateKeys = privateKeys;
+                this.publicKeys.push(publicKeys);
+                this.lamportKeys.push({
+                    privateKeys: privateKeys[0],
+                    publicKeys,
+                });
+                this.saveKeys(this.lamportKeys);
+                return;
+            }
+            throw new Error("keys.json already exists. remove keys/keys.json or use 'load' as option in constructor");
         }
         if (mode === "load") {
             const keys = this.readKeyFile();
-            this.privateKeys = this.initPrivateKeys("load");
+            this.privateKeys = keys.map((key) => key.keys.privateKeys);
             this.publicKeys = keys.map((key) => key.keys.publicKeys);
             this.lamportKeys = keys.map((key) => {
                 return {
@@ -38,16 +50,10 @@ class Manager {
             });
             return;
         }
-        throw new Error("Invalid mode");
+        throw new Error(`Invalid mode: ${mode}`);
     }
-    initPrivateKeys(mode = "new") {
-        if (mode === "new") {
-            return [this.generatePrivateKeys()];
-        }
-        if (mode === "load") {
-            return this.readKeyFile().map((key) => key.keys.privateKeys);
-        }
-        throw new Error("Invalid mode");
+    initPrivateKeys() {
+        return [this.generatePrivateKeys()];
     }
     get privKeys() {
         return this.privateKeys;
@@ -111,7 +117,23 @@ class Manager {
         this.saveKeys(this.lamportKeys);
         return this.lamportKeys[this.lamportKeys.length - 1];
     }
+    static isKeyDirExist() {
+        try {
+            const pwd = process.cwd();
+            const dir = fs_1.default.readdirSync(`${pwd}`);
+            if (dir.length > 0 && dir.includes(consts_1.KEY_DIR_NAME)) {
+                return true;
+            }
+            return false;
+        }
+        catch (error) {
+            return false;
+        }
+    }
     static isKeyFileExist() {
+        if (!Manager.isKeyDirExist()) {
+            return false;
+        }
         try {
             const pwd = process.cwd();
             const file = JSON.parse(fs_1.default.readFileSync(`${pwd}/keys/keys.json`, "utf-8"));
@@ -121,7 +143,6 @@ class Manager {
             return false;
         }
         catch (error) {
-            console.error(error);
             return false;
         }
     }
