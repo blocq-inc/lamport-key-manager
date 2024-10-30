@@ -1,15 +1,17 @@
+import { KEY_DIR_NAME, KEY_FILE_NAME } from "../consts";
 import { LamportSigner } from "../lamport-signer";
 import { Manager } from "../manager";
 import fs from "fs";
 
+afterAll(() => {
+  const pwd = process.cwd();
+  fs.rmSync(`${pwd}/${KEY_DIR_NAME}/${KEY_FILE_NAME}`, { force: true });
+  fs.rmdirSync(`${pwd}/${KEY_DIR_NAME}`, { recursive: true });
+});
 describe("LamportSigner", () => {
-  afterAll(() => {
-    fs.rmSync("./keys/keys.json", { force: true });
-  });
-
-  beforeEach(() => {
+  beforeAll(() => {
     // generate keys
-    const manager = new Manager("new");
+    new Manager("new");
   });
 
   it("should sign to the message by generating keys", () => {

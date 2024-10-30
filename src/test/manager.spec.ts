@@ -1,39 +1,52 @@
+import { KEY_DIR_NAME, KEY_FILE_NAME } from "../consts";
 import { Manager } from "../manager";
 import fs from "fs";
 
 describe("Manager", () => {
-  afterEach(() => {
-    fs.rmSync("./keys/keys.json", { force: true });
+  describe("new", () => {
+    afterEach(() => {
+      const pwd = process.cwd();
+      fs.rmSync(`${pwd}/${KEY_DIR_NAME}/${KEY_FILE_NAME}`, { force: true });
+      fs.rmdirSync(`${pwd}/${KEY_DIR_NAME}`, { recursive: true });
+    });
+
+    it("should generate new keys and save to the file", () => {
+      new Manager("new");
+
+      const file = fs.readFileSync("./keys/keys.json", "utf-8");
+
+      expect(file).toBeDefined();
+    });
   });
 
-  it("should generate new keys and save to the file", () => {
-    new Manager("new");
+  describe("load", () => {
+    afterEach(() => {
+      const pwd = process.cwd();
+      fs.rmSync(`${pwd}/${KEY_DIR_NAME}/${KEY_FILE_NAME}`, { force: true });
+      fs.rmdirSync(`${pwd}/${KEY_DIR_NAME}`, { recursive: true });
+    });
 
-    const file = fs.readFileSync("./keys/keys.json", "utf-8");
+    it("should load existing keys from the file if it exists", () => {
+      new Manager("new");
+      const manager = new Manager("load");
+      expect(manager.currentPubKeyHash).toBeDefined();
+      expect(() => manager.nextPubKeyHash).toThrow();
+      expect(manager.lamportKeys).toBeDefined();
+      expect(manager.lamportKeys.length).toBe(1);
+    });
 
-    expect(file).toBeDefined();
-  });
+    it("should generate next keys", () => {
+      new Manager("new");
+      const manager = new Manager("load");
+      manager.generateNextKeys();
 
-  it("should load existing keys from the file if it exists", () => {
-    new Manager("new");
-    const manager = new Manager("load");
-    expect(manager.currentPubKeyHash).toBeDefined();
-    expect(() => manager.nextPubKeyHash).toThrow();
-    expect(manager.lamportKeys).toBeDefined();
-    expect(manager.lamportKeys.length).toBe(1);
-  });
+      expect(manager.currentPubKeyHash).toBeDefined();
+      expect(manager.nextPubKeyHash).toBeDefined();
+      expect(manager.lamportKeys.length).toBe(2);
 
-  it("should generate next keys", () => {
-    new Manager("new");
-    const manager = new Manager("load");
-    manager.generateNextKeys();
-
-    expect(manager.currentPubKeyHash).toBeDefined();
-    expect(manager.nextPubKeyHash).toBeDefined();
-    expect(manager.lamportKeys.length).toBe(2);
-
-    // different pubkey hash from the previous one
-    expect(manager.currentPubKeyHash).not.toBe(manager.nextPubKeyHash);
+      // different pubkey hash from the previous one
+      expect(manager.currentPubKeyHash).not.toBe(manager.nextPubKeyHash);
+    });
   });
 
   // it("should delete keys if there are more than 2 lamport keys", () => {
@@ -50,4 +63,18 @@ describe("Manager", () => {
   //   // different pubkey hash from the previous one
   //   expect(manager.currentPubKeyHash).not.toBe(manager.nextPubKeyHash);
   // });
+
+  describe("isKeyDirExist", () => {
+    it("should check if ./keys directory exists", () => {
+      const res = Manager.isKeyDirExist();
+      expect(res).toBe(false);
+
+      const pwd = process.cwd();
+      fs.mkdirSync(`${pwd}/${KEY_DIR_NAME}`);
+      expect(Manager.isKeyDirExist()).toBe(true);
+
+      fs.rmdirSync(`${pwd}/${KEY_DIR_NAME}`, { recursive: true });
+      expect(Manager.isKeyDirExist()).toBe(false);
+    });
+  });
 });
