@@ -1,6 +1,6 @@
 # Lamport Key Manager
 
-Lamport Key Manager is a library for managing Lamport keys.
+`Lamport Key Manager` is a library for managing and signing messages with Lamport keys.
 
 ## Installation
 
@@ -8,18 +8,18 @@ Lamport Key Manager is a library for managing Lamport keys.
 npm install @blocq-inc/lamport-key-manager
 ```
 
-```
+```bash
 yarn add @blocq-inc/lamport-key-manager
 ```
 
 ## Usage
 
-1. key generation and save to file
+- key generation and save to file
 
 ```typescript
 import { LamportKeyManager } from "@blocq-inc/lamport-key-manager";
 
-// this will generate keys and save to file in current directory
+// this will generate keys in `./keys/keys.json` and save to file in current directory
 const manager = new LamportKeyManager();
 
 // this will generate next keys and save to file
@@ -32,7 +32,7 @@ const currentLamportKeyPair = manager.currentLamportKeyPair;
 const currentPubKeyHash = manager.currentPubKeyHash;
 ```
 
-2. sign message
+- signing message
 
 ```typescript
 import { LamportSigner } from "@blocq-inc/lamport-key-manager";
@@ -61,6 +61,18 @@ manager.generateNextKeys();
 yarn test
 ```
 
+- run type check
+
+```bash
+yarn type-check
+```
+
+- build
+
+```bash
+yarn build
+```
+
 - link local package
 
 ```bash
@@ -72,3 +84,8 @@ yarn link
 ```bash
 yarn unlink && yarn build && yarn link
 ```
+
+## TODO
+
+- [ ] add tests
+- [ ] add options for hash functions(e.g. sha256)

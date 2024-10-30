@@ -23,19 +23,6 @@
     "dist"
   ],
   "homepage": "https://github.com/blocq-inc/lamport-key-manager",
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "testEnvironment": "node"
-  },
   "keywords": [
     "ethereum",
     "keccak256",
@@ -54,5 +41,18 @@
     "test": "jest -i",
     "type-check": "tsc --noEmit"
   },
-  "types": "dist/esm/index.d.ts"
+  "types": "dist/esm/index.d.ts",
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "testEnvironment": "node"
+  }
 }
