@@ -41,5 +41,6 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "testEnvironment": "node"
-  }
+  },
+  "version": "0.1.0"
 }
