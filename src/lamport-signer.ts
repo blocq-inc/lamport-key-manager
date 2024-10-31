@@ -9,8 +9,8 @@ export class LamportSigner {
   }
 
   // method for signing
-  sign(message: string): Signature {
-    const hash = this.hash(message, "utf-8");
+  sign(message: string, type: EncodeType = "hex"): Signature {
+    const hash = this.hash(message, type);
     const binaryStringOfHash = BigInt(hash).toString(2).padStart(256, "0");
 
     const signature: Signature = [...binaryStringOfHash].map(
@@ -21,8 +21,12 @@ export class LamportSigner {
   }
 
   // method for verification test
-  verify(message: string, signature: Signature): boolean {
-    const hash = this.hash(message, "utf-8");
+  verify(
+    message: string,
+    messageType: EncodeType,
+    signature: Signature
+  ): boolean {
+    const hash = this.hash(message, messageType);
     const binaryStringOfHash = BigInt(hash).toString(2).padStart(256, "0");
 
     const selectedPubKeys = ([...binaryStringOfHash] as ("0" | "1")[]).map(
@@ -40,6 +44,15 @@ export class LamportSigner {
 
   // hash function for keccak256 in ethereum
   private hash(message: string, type: EncodeType): string {
-    return keccak256Hash(message, type);
+    switch (type) {
+      case "hex":
+        return keccak256Hash(message, "hex");
+      case "utf-8":
+        return keccak256Hash(message, "utf-8");
+      case "ascii":
+        return keccak256Hash(message, "ascii");
+      default:
+        throw Error("invalid encode type");
+    }
   }
 }

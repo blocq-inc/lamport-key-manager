@@ -5,11 +5,11 @@
 ## Installation
 
 ```bash
-npm install @blocq-inc/lamport-key-manager
+npm install @blocq-inc/lamport-key-manager-lib
 ```
 
 ```bash
-yarn add @blocq-inc/lamport-key-manager
+yarn add @blocq-inc/lamport-key-manager-lib
 ```
 
 ## Usage

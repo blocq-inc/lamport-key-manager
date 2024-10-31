@@ -5,7 +5,7 @@ export const keccak256Hash = (
   message: string,
   type: EncodeType = "hex"
 ): string => {
-  if (message.startsWith("0x")) {
+  if (type === "hex" && message.startsWith("0x")) {
     message = message.slice(2);
   }
   return ethers.keccak256(Buffer.from(message, type));
