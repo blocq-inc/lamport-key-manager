@@ -31,7 +31,7 @@ let pubKeyHash2: string = "";
   const signature = signer.sign(message);
 
   // 3. verify signature(on the server side)
-  const isValid = signer.verify(message, signature);
+  const isValid = signer.verify(message, "utf-8", signature);
   console.log(isValid);
 
   // 4. send signature to the contract

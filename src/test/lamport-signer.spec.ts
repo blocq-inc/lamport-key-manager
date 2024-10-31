@@ -33,10 +33,10 @@ describe("LamportSigner", () => {
     );
 
     const message = "hello";
-    const signature = signer.sign(message);
+    const signature = signer.sign(message, "utf-8");
 
-    expect(signer.verify(message, signature)).toBe(true);
-    expect(signer.verify("hello1", signature)).toBe(false);
+    expect(signer.verify(message, "utf-8", signature)).toBe(true);
+    expect(signer.verify("hello1", "utf-8", signature)).toBe(false);
   });
 
   it("should not verify invalid message", () => {
@@ -45,7 +45,11 @@ describe("LamportSigner", () => {
       manager.lamportKeys[manager.lamportKeys.length - 1]
     );
 
-    expect(signer.verify("helli", signer.sign("hello"))).toBe(false);
-    expect(signer.verify("aello", signer.sign("hello"))).toBe(false);
+    expect(signer.verify("helli", "utf-8", signer.sign("hello", "utf-8"))).toBe(
+      false
+    );
+    expect(signer.verify("aello", "utf-8", signer.sign("hello", "utf-8"))).toBe(
+      false
+    );
   });
 });

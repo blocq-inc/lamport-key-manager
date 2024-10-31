@@ -5,11 +5,11 @@
 ## Installation
 
 ```bash
-npm install @blocq-inc/lamport-key-manager
+npm install @blocq-inc/lamport-key-manager-lib
 ```
 
 ```bash
-yarn add @blocq-inc/lamport-key-manager
+yarn add @blocq-inc/lamport-key-manager-lib
 ```
 
 ## Usage
@@ -82,7 +82,7 @@ yarn link
 - unlink local package, re-build and link again after updating the code for the local development
 
 ```bash
-yarn unlink && yarn build && yarn link
+yarn relink
 ```
 
 ## TODO
