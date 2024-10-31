@@ -26,8 +26,10 @@
   "keywords": [
     "ethereum",
     "keccak256",
+    "quantum resistant",
+    "hash based signature",
     "lamport signature",
-    "post-quantum"
+    "post quantum"
   ],
   "license": "MIT",
   "main": "dist/cjs/index.js",
