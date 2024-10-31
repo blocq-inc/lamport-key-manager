@@ -1,6 +1,6 @@
 {
   "name": "@blocq-inc/lamport-key-manager-lib",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lamport Key Manegement Library",
   "author": "Naoto Sato <stardustforever012@gmail.com>",
   "bugs": {
