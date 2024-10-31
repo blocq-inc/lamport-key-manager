@@ -82,7 +82,7 @@ yarn link
 - unlink local package, re-build and link again after updating the code for the local development
 
 ```bash
-yarn unlink && yarn build && yarn link
+yarn relink
 ```
 
 ## TODO
