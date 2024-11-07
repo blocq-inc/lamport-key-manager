@@ -1,4 +1,4 @@
-import { Manager } from "./src/manager";
+import { LamportKeyManager } from "./src/lamport-key-manager";
 import { LamportSigner } from "./src/lamport-signer";
 import assert from "assert";
 import { keccak256Hash } from "./src/crypto/keccak256";
@@ -9,7 +9,7 @@ import fs from "fs";
 const nextPKH =
   "0x9046dad06267aa2d30b5ed86d2febd935040576fccdf193561ad09cec5d243c3";
 // 1. load lamport keys
-const manager = new Manager("load");
+const manager = new LamportKeyManager("load");
 
 assert(nextPKH !== manager.currentPubKeyHash, "load failed");
 

@@ -1,4 +1,9 @@
-import { EncodeType, HashType, LamportKeyPair, Signature } from "./types";
+import {
+  EncodeType,
+  HashType,
+  LamportKeyPair,
+  LamportSignature,
+} from "./types";
 import { keccak256Hash } from "./crypto/keccak256";
 
 export class LamportSigner {
@@ -9,11 +14,11 @@ export class LamportSigner {
   }
 
   // method for signing
-  sign(message: string, type: EncodeType = "hex"): Signature {
+  sign(message: string, type: EncodeType = "hex"): LamportSignature {
     const hash = this.hash(message, type);
     const binaryStringOfHash = BigInt(hash).toString(2).padStart(256, "0");
 
-    const signature: Signature = [...binaryStringOfHash].map(
+    const signature: LamportSignature = [...binaryStringOfHash].map(
       (value: string, idx: number) =>
         "0x" + this.keys.privateKeys[idx][Number(value)]
     );
@@ -24,7 +29,7 @@ export class LamportSigner {
   verify(
     message: string,
     messageType: EncodeType,
-    signature: Signature
+    signature: LamportSignature
   ): boolean {
     const hash = this.hash(message, messageType);
     const binaryStringOfHash = BigInt(hash).toString(2).padStart(256, "0");

@@ -16,14 +16,14 @@ import {
 } from "./consts";
 import { keccak256Hash } from "./crypto/keccak256";
 
-export class Manager {
+export class LamportKeyManager {
   privateKeys: PrivKey[] = [];
   publicKeys: PubKey[] = [];
   lamportKeys: LamportKeyPair[] = [];
 
   constructor(mode: InitMode = "new") {
     if (mode === "new") {
-      if (!Manager.isKeyDirExist()) {
+      if (!LamportKeyManager.isKeyDirExist()) {
         const pwd = process.cwd();
         try {
           fs.mkdirSync(`${pwd}/${KEY_DIR_NAME}`);
@@ -31,7 +31,7 @@ export class Manager {
           throw new Error(`Failed to create directory: /${KEY_DIR_NAME}`);
         }
       }
-      if (!Manager.isKeyFileExist()) {
+      if (!LamportKeyManager.isKeyFileExist()) {
         const privateKeys = this.initPrivateKeys();
         const publicKeys = this.getPublicKeyFromPrivateKey(privateKeys[0]);
         this.privateKeys = privateKeys;
@@ -160,7 +160,7 @@ export class Manager {
   }
 
   public static isKeyFileExist(): boolean {
-    if (!Manager.isKeyDirExist()) {
+    if (!LamportKeyManager.isKeyDirExist()) {
       return false;
     }
     try {
