@@ -1,6 +1,6 @@
 import { LamportSigner } from "./lamport-signer";
-import { Manager as LamportManager } from "./manager";
-import type { Signature, LamportKeyPair, PrivKey, PubKey } from "./types";
-export { LamportSigner, LamportManager };
-export type { Signature, LamportKeyPair, PrivKey, PubKey };
+import { LamportKeyManager } from "./lamport-key-manager";
+import type { LamportSignature, LamportKeyPair, PrivKey, PubKey } from "./types";
+export { LamportSigner, LamportKeyManager };
+export type { LamportSignature, LamportKeyPair, PrivKey, PubKey };
 //# sourceMappingURL=index.d.ts.map

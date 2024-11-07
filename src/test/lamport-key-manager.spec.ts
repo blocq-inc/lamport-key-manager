@@ -1,5 +1,5 @@
 import { KEY_DIR_NAME, KEY_FILE_NAME } from "../consts";
-import { Manager } from "../manager";
+import { LamportKeyManager } from "../lamport-key-manager";
 import fs from "fs";
 
 describe("Manager", () => {
@@ -11,7 +11,7 @@ describe("Manager", () => {
     });
 
     it("should generate new keys and save to the file", () => {
-      new Manager("new");
+      new LamportKeyManager("new");
 
       const file = fs.readFileSync("./keys/keys.json", "utf-8");
 
@@ -27,8 +27,8 @@ describe("Manager", () => {
     });
 
     it("should load existing keys from the file if it exists", () => {
-      new Manager("new");
-      const manager = new Manager("load");
+      new LamportKeyManager("new");
+      const manager = new LamportKeyManager("load");
       expect(manager.currentPubKeyHash).toBeDefined();
       expect(() => manager.nextPubKeyHash).toThrow();
       expect(manager.lamportKeys).toBeDefined();
@@ -36,8 +36,8 @@ describe("Manager", () => {
     });
 
     it("should generate next keys", () => {
-      new Manager("new");
-      const manager = new Manager("load");
+      new LamportKeyManager("new");
+      const manager = new LamportKeyManager("load");
       manager.generateNextKeys();
 
       expect(manager.currentPubKeyHash).toBeDefined();
@@ -66,15 +66,15 @@ describe("Manager", () => {
 
   describe("isKeyDirExist", () => {
     it("should check if ./keys directory exists", () => {
-      const res = Manager.isKeyDirExist();
+      const res = LamportKeyManager.isKeyDirExist();
       expect(res).toBe(false);
 
       const pwd = process.cwd();
       fs.mkdirSync(`${pwd}/${KEY_DIR_NAME}`);
-      expect(Manager.isKeyDirExist()).toBe(true);
+      expect(LamportKeyManager.isKeyDirExist()).toBe(true);
 
       fs.rmdirSync(`${pwd}/${KEY_DIR_NAME}`, { recursive: true });
-      expect(Manager.isKeyDirExist()).toBe(false);
+      expect(LamportKeyManager.isKeyDirExist()).toBe(false);
     });
   });
 });

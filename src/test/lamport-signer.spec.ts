@@ -1,6 +1,6 @@
 import { KEY_DIR_NAME, KEY_FILE_NAME } from "../consts";
 import { LamportSigner } from "../lamport-signer";
-import { Manager } from "../manager";
+import { LamportKeyManager } from "../lamport-key-manager";
 import fs from "fs";
 
 afterAll(() => {
@@ -11,11 +11,11 @@ afterAll(() => {
 describe("LamportSigner", () => {
   beforeAll(() => {
     // generate keys
-    new Manager("new");
+    new LamportKeyManager("new");
   });
 
   it("should sign to the message by generating keys", () => {
-    const manager = new Manager("load");
+    const manager = new LamportKeyManager("load");
     // sign by the 1st lamport keys
     const signer = new LamportSigner(manager.lamportKeys[0]);
 
@@ -27,7 +27,7 @@ describe("LamportSigner", () => {
   });
 
   it("should verify the valid signature", () => {
-    const manager = new Manager("load");
+    const manager = new LamportKeyManager("load");
     const signer = new LamportSigner(
       manager.lamportKeys[manager.lamportKeys.length - 1]
     );
@@ -40,7 +40,7 @@ describe("LamportSigner", () => {
   });
 
   it("should not verify invalid message", () => {
-    const manager = new Manager("load");
+    const manager = new LamportKeyManager("load");
     const signer = new LamportSigner(
       manager.lamportKeys[manager.lamportKeys.length - 1]
     );

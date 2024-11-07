@@ -12,7 +12,7 @@ export type HashType = "keccak256" | "sha256";
 export type EncodeType = "hex" | "ascii" | "utf-8";
 export type InitMode = "new" | "load";
 
-export type Signature = string[];
+export type LamportSignature = string[];
 
 export type KeyInfo = {
   index: number;

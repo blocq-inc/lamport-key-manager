@@ -1,3 +1,3 @@
 import { LamportSigner } from "./lamport-signer";
-import { Manager as LamportManager } from "./manager";
-export { LamportSigner, LamportManager };
+import { LamportKeyManager } from "./lamport-key-manager";
+export { LamportSigner, LamportKeyManager };

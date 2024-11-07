@@ -1,7 +1,12 @@
 import { LamportSigner } from "./lamport-signer";
-import { Manager as LamportManager } from "./manager";
-import type { Signature, LamportKeyPair, PrivKey, PubKey } from "./types";
+import { LamportKeyManager } from "./lamport-key-manager";
+import type {
+  LamportSignature,
+  LamportKeyPair,
+  PrivKey,
+  PubKey,
+} from "./types";
 
-export { LamportSigner, LamportManager };
+export { LamportSigner, LamportKeyManager };
 
-export type { Signature, LamportKeyPair, PrivKey, PubKey };
+export type { LamportSignature, LamportKeyPair, PrivKey, PubKey };

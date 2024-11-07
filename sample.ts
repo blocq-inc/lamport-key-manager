@@ -1,4 +1,4 @@
-import { Manager } from "./src/manager";
+import { LamportKeyManager } from "./src/lamport-key-manager";
 import { LamportSigner } from "./src/lamport-signer";
 
 // # This script is usage example flow.
@@ -8,7 +8,7 @@ let pubKeyHash1: string = "";
 let pubKeyHash2: string = "";
 {
   // 1. generate new lamport keys and save to the local file.
-  const manager = new Manager("new");
+  const manager = new LamportKeyManager("new");
 
   pubKeyHash1 = manager.currentPubKeyHash;
 
@@ -21,7 +21,7 @@ let pubKeyHash2: string = "";
 {
   const message = "Hello, World!";
   // 1. load lamport keys
-  const manager = new Manager("load");
+  const manager = new LamportKeyManager("load");
 
   console.log("currentPubKeyHash", manager.currentPubKeyHash);
 
